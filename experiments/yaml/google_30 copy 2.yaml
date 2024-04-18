@@ -1,0 +1,155 @@
+task_definition:
+  prompt: "Automate structured queries on Google and navigate result pages to extract key information."
+  user_variables:
+    search_query: "Parque de wakeboard Fortaleza Brasil"
+    result_count: 30
+  gen_variables:
+    url: "https://google.com"
+  memory:
+    search_results:
+      type: "table"
+      columns: ["title", "url", "description"]
+
+selectors:
+  searchInput: "input[name='q']"
+  searchButton: "input[type='submit'][name='btnK']"
+  searchResultLink: "div.yuRUbf > a"
+  searchResultTitle: "h3.LC20lb"
+  searchResultDescription: "div.IsZvec"
+  nextPageButton: "a#pnnext"
+
+actions:
+  navigate:
+    - action: "navigate"
+      url: "{{url}}"
+  type_search:
+    - action: "type"
+      selector: "{{selectors.searchInput}}"
+      text: "{{search_query}}"
+  click_search:
+    - action: "click"
+      selector: "{{selectors.searchButton}}"
+  parse_results:
+    - action: "parse"
+      selectors:
+        title: "{{selectors.searchResultTitle}}"
+        url: "{{selectors.searchResultLink}}"
+        description: "{{selectors.searchResultDescription}}"
+  store_results:
+    - action: "store"
+      destination: "search_results"
+  navigate_next:
+    - action: "click"
+      selector: "{{selectors.nextPageButton}}"
+      optional: true
+
+steps:
+  - id: "initiate_search"
+    actions: ["navigate", "type_search", "click_search"]
+  - id: "collect_results"
+    description: "Collect and store search results up to the desired count."
+    repeat:
+      actions: ["parse_results", "store_results", "navigate_next"]
+      until:
+        or:
+          - condition: "results_collected"
+            count: "{{result_count}}"
+          - condition: "action_failed"
+            action: "navigate_next"
+    error_handling: "retry_strategy"
+
+validation_steps:
+  - action: "navigate"
+    description: "Navigate to the target URL."
+    url: "{{url}}"
+
+  # Validate static elements present on load.
+  - action: "validate"
+    checks:
+      - selector: "{{selectors.searchInput}}"
+        message: "Search input box is missing. Selector: {{selectors.searchInput}}"
+      - selector: "{{selectors.searchButton}}"
+        message: "Search submit button is missing. Selector: {{selectors.searchButton}}"
+    fix: "parseDom"
+
+  # Perform a search to expose dynamic elements.
+  - action: "type"
+    selector: "{{selectors.searchInput}}"
+    text: "Test Search"
+  - action: "click"
+    selector: "{{selectors.searchButton}}"
+
+  # Validate dynamic elements after search.
+  - action: "validate"
+    checks:
+      - selector: "{{selectors.searchResultLink}}"
+        message: "Search result links are not present as expected after search. Selector: {{selectors.searchResultLink}}"
+      - selector: "{{selectors.searchResultTitle}}"
+        message: "Search result titles are missing after search. Selector: {{selectors.searchResultTitle}}"
+      - selector: "{{selectors.searchResultDescription}}"
+        message: "Search result descriptions are missing after search. Selector: {{selectors.searchResultDescription}}"
+
+  # Check pagination control, if present.
+  - action: "validate"
+    selector: "{{selectors.nextPageButton}}"
+    message: "Pagination 'Next' control is missing. Selector: {{selectors.nextPageButton}}"
+
+errors:
+  retry_strategy:
+    attempts: 3
+    delay: 2
+
+user_interface:
+  title: "Automated Google Search Extractor"
+  description: "This interface allows you to perform structured queries on Google, navigate through the result pages, and extract key information into a structured format."
+  input_form:
+    fields:
+      - id: "search_query"
+        label: "Search Query"
+        type: "text"
+        placeholder: "Enter your search query here"
+        tooltip: "Type the search term you want to look up on Google."
+      - id: "result_count"
+        label: "Number of Results"
+        type: "number"
+        default: 30
+        tooltip: "Specify how many search results you want to collect."
+    submit_button:
+      label: "Start Search"
+      action: "initiate_search"
+  results_display:
+    description: "View the collected search results below."
+    type: "table"
+    columns:
+      - title: "Title"
+        id: "title"
+        type: "text"
+      - title: "URL"
+        id: "url"
+        type: "link"
+      - title: "Description"
+        id: "description"
+        type: "text"
+  progress_indicator:
+    type: "bar"
+    description: "Search Progress"
+  error_handling:
+    display_error: "Show a descriptive error message on failure."
+    retry_option:
+      label: "Retry Failed Search"
+      action: "retry_strategy"
+  external_validation:
+    description: "Run a series of pre-defined checks to ensure critical page elements are present before initiating a search."
+    display_status: "Show validation status before search initiation."
+  settings:
+    description: "Configure advanced settings for the search process."
+    fields:
+      - id: "delay_between_actions"
+        label: "Delay Between Actions"
+        type: "number"
+        default: 2
+        tooltip: "Adjust the delay (in seconds) between automated actions to mimic human behavior and comply with Google’s request rate limits."
+  help_section:
+    description: "Need help? Find instructions and FAQs here."
+  footer:
+    content: "This tool is for educational and research purposes only. Please ensure to use it responsibly and in compliance with Google's terms of service."

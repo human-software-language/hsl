@@ -1,0 +1,77 @@
+prompt: Find wake board parks in Fortaleza, I need 30 results.
+
+variables: &var
+  search_query: Parque de wakeboard Fortaleza Brasil
+  result_count: 30
+  url: https://google.com
+
+memory: &mem
+  results:
+    type: table
+    columns: [title, url, description]
+
+selectors: &sel
+  searchInput: input[name='q']
+  searchButton: input[type='submit'][name='btnK']
+  searchResultLink: div.yuRUbf > a
+  searchResultTitle: h3.LC20lb
+  searchResultDescription: div.IsZvec
+  nextPageButton: a#pnnext
+
+actions: &act
+  navigate:
+    url: *var.url
+  type_search:
+    selector: *sel.searchInput
+    text: *var.search_query
+  click_search:
+    selector: *sel.searchButton
+  parse_result:
+    title: *sel.searchResultTitle
+    url: *sel.searchResultLink
+    description: *sel.searchResultDescription
+  store_result:
+    destination: *mem.results
+  click_next:
+    selector: *sel.nextPageButton
+    optional: true
+
+validation:
+  *act.navigate
+  validate:
+    - selector: *sel.searchInput
+    - selector: *sel.searchButton
+  *act.type_search
+    text: Test Search
+  validate:
+    - selector: *sel.searchButton
+    - expect: exist
+  *act.click_search
+  validate:
+    - selector: *sel.searchResultLink
+    - selector: *sel.searchResultTitle
+    - selector: *sel.searchResultDescription
+  *act.click_next
+    optional: false
+  validate:
+    - selector: *sel.nextPageButton
+
+steps:
+  - action: navigate
+    description: "Open the specified URL to start the search."
+  - action: type_search
+    description: "Enter the search query in the search input field."
+  - action: click_search
+    description: "Click the search button to execute the search."
+  - loop:
+      action: parse_result
+      description: "Parse the search results from the current page."
+      until: 
+        - condition: result_count_reached
+          value: *var.result_count
+        - condition: no_more_pages
+  - action: store_result
+    description: "Store the parsed search results in the designated memory structure."
+  - action: click_next
+    description: "Click the next page button to continue searching if more results are needed and available."
+    optional: true

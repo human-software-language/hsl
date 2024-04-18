@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Extension Watch",
+      "type": "npm",
+      "script": "watch",
+      "path": "packages/extension/",
+      "isBackground": true,
+      "problemMatcher": ["$eslint-stylish"]
+    }
+  ]
+}

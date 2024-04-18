@@ -1,0 +1,44 @@
+{
+  "reasoning_modules": [
+    {
+      "id": 1,
+      "type": "Task Analysis",
+      "description": "Analyze the task to identify key steps and required inputs and outputs for each step."
+    },
+    {
+      "id": 2,
+      "type": "Interface Design",
+      "description": "Design input and output interfaces for each step, specifying the data format and interaction mechanisms."
+    },
+    {
+      "id": 3,
+      "type": "Code Generation Preparation",
+      "description": "Prepare for code generation by outlining the JavaScript functions and Chrome extension structure needed to automate browser navigation."
+    },
+    {
+      "id": 4,
+      "type": "Step Implementation",
+      "description": "Implement each step in JavaScript, ensuring that the code interacts correctly with the designed interfaces and performs the intended navigation and data manipulation."
+    },
+    {
+      "id": 5,
+      "type": "Automation Testing",
+      "description": "Test the automated steps individually and as a whole to ensure reliability and accuracy in browser navigation and task completion."
+    },
+    {
+      "id": 6,
+      "type": "Error Handling",
+      "description": "Incorporate error handling mechanisms to manage exceptions and unforeseen issues during automation."
+    },
+    {
+      "id": 7,
+      "type": "Optimization",
+      "description": "Optimize the automation script for performance, including reducing execution time and resource consumption."
+    },
+    {
+      "id": 8,
+      "type": "Documentation",
+      "description": "Document the automation process, including the purpose of each step, interface specifications, and code usage instructions."
+    }
+  ]
+}

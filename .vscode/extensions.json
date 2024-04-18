@@ -1,0 +1,6 @@
+{
+  "recommendations": [
+    "krysenlo.vite-plugin-eslint-problemmatcher",
+    "connor4312.esbuild-problem-matchers"
+  ]
+}

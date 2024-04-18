@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "HSL"
+version = "0.1.0"
+description = ""
+authors = ["HSLang.ai"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+dspy-ai = "^2.1.9"
+playwright-stealth = "^1.0.6"
+playwright = "^1.41.2"
+lark = "^1.1.9"
+pygls = {extras = ["ws"], version = "^1.3.1"}
+streamlit = "^1.33.0"
+debugpy = "^1.8.1"
+streamlit-option-menu = "^0.3.12"
+streamlit-router = "^0.1.3"
+
+
+
+[tool.poetry.group.dev.dependencies]
+pyperclip = "^1.8.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

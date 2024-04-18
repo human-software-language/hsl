@@ -1,0 +1,56 @@
+prompt: Find wake board parks in Fortaleza, I need 30 results.
+
+# Extracted from prompt variables
+var:
+  search_query: Parque de wakeboard Fortaleza Brasil
+  result_count: 30
+  url: https://google.com
+
+# Memory
+mem:
+  results:
+    type: table
+    columns: [title, url, description]
+
+# Selectors
+sel:
+  searchInput: input[name='q']
+  searchButton: input[type='submit'][name='btnK']
+  searchContainer: div[id='center_col']
+    - searchResultLink: a
+    - searchResultTitle: h3
+    - searchResultDescription: div
+  nextPageButton: a#pnnext
+
+# System actions
+act:
+  navigate:
+    url: var.url
+  type_search:
+    search_input: sel.searchInput
+    text: var.search_query
+  click_search:
+    search_button: sel.searchButton
+  parse_result:
+    title: sel.searchResultTitle
+    url: sel.searchResultLink
+    description: sel.searchResultDescription
+  store_result: mem.results
+  click_next:
+    next_page: sel.nextPageButton
+    optional: true
+
+# Steps to validate system workability
+val:
+  act.navigate:
+    is_exist: [sel.searchInput, sel.searchButton]
+  act.type_search:
+    text: Test Search
+    is_exist: sel.searchButton
+    is_filled: sel.searchInput
+  act.click_search:
+    is_exist:
+      [sel.searchResultLink, sel.searchResultTitle, sel.searchResultDescription]
+  act.click_next:
+    is_exist: sel.nextPageButton
+    optional: false

@@ -1,0 +1,15 @@
+*/gen_code/*
+*/node_modules/*
+.vscode-test/**
+.vscode-test
+*.vsix
+node_modules/
+out
+.direnv
+mume
+crossnote
+.vscode-test-web
+pnpm-lock.yaml
+*.log
+__pycache**
+.env

@@ -1,0 +1,14 @@
+{
+  "cSpell.words": [
+    "crossnote",
+    "debugpy",
+    "outfile",
+    "pylsp",
+    "PYTHONPATH",
+    "streamlit"
+  ],
+  "search.exclude": {
+    "out": true // set this to false to include "out" folder in search results
+  },
+  "CodeGPT.apiKey": "Anthropic"
+}

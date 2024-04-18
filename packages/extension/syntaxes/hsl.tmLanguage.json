@@ -1,0 +1,151 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Human Software Language",
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#markdown"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.hsl",
+          "match": "\\b(if|else|for|while|repeat|step|define|component|input|output|context|secret|import)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.hsl",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.hsl",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.parameter.hsl",
+          "match": "\\b(\\w+)\\s*:\\s*(text|number|table|boolean)"
+        },
+        {
+          "name": "variable.other.hsl",
+          "match": "\\b(\\w+)\\b"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.hsl",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.hsl",
+          "match": "//.*"
+        }
+      ]
+    },
+    "markdown": {
+      "patterns": [
+        {
+          "name": "markup.heading.hsl",
+          "match": "^(#{1,6})\\s+(.*)$",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.heading.hsl"
+            },
+            "2": {
+              "name": "entity.name.section.hsl",
+              "patterns": [
+                {
+                  "include": "#markdown-inline"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "markup.list.numbered.hsl",
+          "match": "^(\\d+\\.)(.*)",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.list.hsl"
+            },
+            "2": {
+              "name": "meta.paragraph.list.hsl",
+              "patterns": [
+                {
+                  "include": "#markdown-inline"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "markup.list.unnumbered.hsl",
+          "match": "^([-*])\\s+",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.list.hsl"
+            }
+          }
+        },
+        {
+          "name": "markup.bold.hsl",
+          "match": "\\*\\*(.+?)\\*\\*",
+          "captures": {
+            "1": {
+              "name": "markup.bold.hsl"
+            }
+          }
+        },
+        {
+          "name": "markup.italic.hsl",
+          "match": "\\*(.+?)\\*",
+          "captures": {
+            "1": {
+              "name": "markup.italic.hsl"
+            }
+          }
+        }
+      ]
+    },
+    "markdown-inline": {
+      "patterns": [
+        {
+          "include": "#variables"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "name": "punctuation.definition.link.hsl",
+          "match": "!?\\[.*?\\]\\(.*?\\)"
+        },
+        {
+          "name": "punctuation.definition.image.hsl",
+          "match": "!\\[.*?\\]\\(.*?\\)"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.hsl"
+}

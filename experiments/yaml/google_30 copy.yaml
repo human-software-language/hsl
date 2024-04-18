@@ -1,0 +1,82 @@
+# Automates structured queries on Google to navigate result pages, extracting key information up to a variable number of results. Designed for flexible, efficient search data aggregation.
+
+task_definition:
+  prompt: ""
+  variables:
+    search_query: "Parque de wakeboard Fortaleza Brasil"
+    result_count: 30
+  memory:
+    store_results:
+      operation: "store"
+      type: "table"
+      params:
+        search_results: { columns: ["title", "url", "description"] }
+  outcome: "Generates a structured table with specified number of search results."
+
+definitions:
+  actions:
+    navigate:
+      goto: { url: "https://google.com" }
+    type_search:
+      cmd: "type"
+      params:
+        selector: "input[name='q']"
+        text: "{{search_query}}"
+    click_search:
+      cmd: "click"
+      params: { selector: "input[name='btnK']" }
+    parse_results:
+      cmd: "parse"
+      params:
+        selectors: { title: "h3", url: ".yuRUbf > a", description: ".IsZvec" }
+    navigate_next:
+      cmd: "click"
+      params: { selector: "a#pnnext" }
+
+  validations:
+    check_presence:
+      check: "element_presence"
+      params: { selector: "input[name='q']" }
+    check_page_load:
+      check: "page_load"
+      params: { url_contains: "search" }
+    check_count:
+      check: "element_count"
+      params: { selector: ".tF2Cxc", min: 1 }
+
+  errors:
+    retry_action:
+      strategy: "auto_retry"
+      params: { attempts: 3, delay: 2 }
+    apply_fix:
+      strategy: "auto_fix"
+      params: { fix_instructions: "Adjust selector or increase delay." }
+
+steps:
+  - id: 1
+    action: "navigate"
+    validate: "check_presence"
+    error_handling: "retry_action"
+
+  - id: 2
+    action: "type_search"
+    validate: "check_presence"
+    error_handling: "retry_action"
+
+  - id: 3
+    action: "click_search"
+    validate: "check_page_load"
+    error_handling: "apply_fix"
+
+  - id: 4
+    description: "Collect search results based on defined count, navigating through pages."
+    repeat:
+      until: { condition: "results_collected", count: "{{result_count}}" } # Use variable for result count
+      actions:
+        - action: "parse_results"
+          validate: "check_count"
+          memory: "store_results"
+        - action: "navigate_next"
+          validate: "check_page_load"
+          error_handling: "retry_action"
+    error_handling: "apply_fix"

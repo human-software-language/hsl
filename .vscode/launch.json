@@ -1,0 +1,71 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Build context for LLM",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/utils/build_llm_context.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "DAP Server",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "packages.dap",
+      "args": ["--host", "localhost", "--port", "5678"],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "LSP Server",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "packages.lsp",
+      "args": ["--tcp", "--host", "localhost", "--port", "2087"],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "Playground",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": [
+        "run",
+        "${workspaceFolder}/packages/playground/app.py",
+        "--server.port",
+        "8501",
+        "--server.address",
+        "localhost"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/packages/extension"
+      ],
+      "outFiles": ["${workspaceFolder}/packages/extension/out/**/*.js"],
+      "preLaunchTask": "Start Extension Watch",
+      "env": {
+        "DEBUG_MODE": "true"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Project Debug",
+      "configurations": ["DAP Server", "Extension", "LSP Server", "Playground"]
+    }
+  ]
+}

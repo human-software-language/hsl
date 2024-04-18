@@ -1,0 +1,127 @@
+{
+  "name": "hsl",
+  "displayName": "HSL",
+  "version": "0.0.1",
+  "description": "Human Software Language",
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "build": "node build.js",
+    "check:all": "yarn check:eslint && yarn check:prettier",
+    "check:eslint": "eslint \"**/*\"",
+    "check:prettier": "prettier --check \"**/*.*\"",
+    "fix:all": "yarn fix:eslint && yarn fix:eslint && yarn fix:prettier",
+    "fix:eslint": "eslint --fix \"**/*\"",
+    "fix:prettier": "prettier --write \"**/*.*\"",
+    "watch": "node build.js --watch"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "hsl.renderHSL",
+        "title": "Render HSL"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "hsl",
+        "label": "HSL Debug",
+        "languages": [
+          "hsl"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "The path to the HSL program file you want to debug."
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "hsl",
+            "request": "launch",
+            "name": "Debug HSL Program",
+            "program": "${file}"
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "HSL Debug: Launch Current File",
+            "description": "A configuration to debug the currently open HSL program.",
+            "body": {
+              "type": "hsl",
+              "request": "launch",
+              "name": "Debug HSL Program",
+              "program": "${file}"
+            }
+          }
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "hsl",
+        "scopeName": "source.hsl",
+        "path": "./syntaxes/hsl.tmLanguage.json"
+      }
+    ],
+    "languages": [
+      {
+        "id": "hsl",
+        "aliases": [
+          "Human Software Language",
+          "hsl"
+        ],
+        "extensions": [
+          ".hsl"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ]
+  },
+  "activationEvents": [
+    "*",
+    "onDebug"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.*": [
+      "eslint",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "crossnote": "^0.9.9",
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/vscode": "^1.87.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "concurrently": "^8.2.2",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "pnpm": "^8.15.5",
+    "prettier": "^3.2.5",
+    "prettier-plugin-packagejson": "^2.4.14",
+    "typescript": "^5.4.2"
+  },
+  "engines": {
+    "vscode": "^1.87.0"
+  }
+}

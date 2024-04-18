@@ -1,0 +1,33 @@
+# OS: OpenAI Analyze Table
+
+This component uses OpenAI to turn data from a table into actionable insights, summaries, or predictions, making complex data easy to understand.
+
+## Input
+
+- `dataTable: table` - The table with data to be analyzed. Must have headers for context.
+- `analysisType: text` - Specifies the analysis needed, such as "Summary", "Trend Analysis", etc.
+- `parameters: text (optional)` - Additional instructions to narrow down the focus of the analysis.
+
+## Output
+
+- `analysisResults: text` - Insights, summaries, or predictions derived from the table data.
+
+## Secret
+
+- `openaiApiKey: text` - The API key for authenticating requests to OpenAI. This key should be securely stored and used only as needed for API requests.
+
+## Steps
+
+1. Convert `dataTable` to a structured text or JSON that includes headers and data points, suitable for analysis by OpenAI.
+
+2. Build a detailed prompt that includes `analysisType` and incorporates `parameters` if provided. The prompt should clearly direct OpenAI to perform the specified analysis on the table data.
+
+3. If `parameters` are specified, integrate them into the prompt to ensure the analysis focuses on the desired aspects of the table, such as specific columns or data points.
+
+4. Format and send an API request to OpenAI with the prepared prompt and table data. The request should adhere to OpenAI's API guidelines, including authentication and the appropriate configuration for the analysis task.
+
+5. Await the response from OpenAI, then extract and process the `analysisResults`. This may involve parsing OpenAI's output to identify the main insights, trends, or predictions relevant to the requested analysis.
+
+6. Clean up and format the `analysisResults` to ensure they are clear and directly address the analysis objectives. The results should be ready for presentation or further action.
+
+7. Provide the `analysisResults` as the output, delivering a comprehensive analysis of the table data according to the specified type and focus of the analysis.

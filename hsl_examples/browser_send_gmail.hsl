@@ -1,0 +1,32 @@
+# Browser: Send Gmail Message
+
+This process automates the task of composing and sending an email message through Gmail. It is designed to simplify communication by allowing users to quickly send emails to one or more recipients, with optional attachments, subject lines, and message bodies.
+
+## Context
+
+Activated when a user needs to send an email via Gmail, whether for personal or professional communication. This includes sending updates, files, or any information to contacts efficiently.
+
+## Input
+
+- `recipientEmail: text` - The email address of the recipient. Multiple email addresses can be separated by commas for multiple recipients.
+- `subject: text` - The subject line of the email. This is optional; if not provided, the email will have no subject.
+- `messageBody: text` - The main content of the email. This is optional; if not provided, the email will be sent with an empty body.
+- `attachments: text` - Files locations to be attached to the email. This is optional; if not provided, the email will be sent without attachments.
+
+## Output
+
+- `emailSentConfirmation: table` - Confirmation that the email has been sent successfully, including the time of sending.
+
+## Steps
+
+1. Navigate to `https://mail.google.com/` and ensure you are logged in to your Gmail account.
+2. Click on the `[compose button]` to open a new message window.
+3. In the `To` field `[to field]`, enter the recipient's email address `recipientEmail`. For multiple recipients, separate each email address with a comma.
+4. If `subject` is provided:
+   - Find the `Subject` field `[subject field]` and enter `subject`.
+5. If `messageBody` is provided:
+   - Locate the `Message body` area `[message body area]` and enter `messageBody`.
+6. If `attachments` are provided:
+   - Click on the `[attach files button]` and select the files from your computer to attach to the email.
+7. Once all information is entered, click the `[send button]` to send the email.
+8. Confirm that the email has been sent by checking for a "Message sent" notification `[message sent notification]` and log the confirmation and time of sending as `emailSentConfirmation`.
