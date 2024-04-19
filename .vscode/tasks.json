@@ -7,7 +7,22 @@
       "script": "watch",
       "path": "packages/extension/",
       "isBackground": true,
-      "problemMatcher": ["$eslint-stylish"]
+      "problemMatcher": {
+        "owner": "eslint",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(.*)\\s\\[(.*)\\]$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4,
+          "severity": 5
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*\\[watch\\] build started.*",
+          "endsPattern": ".*\\[watch\\] build finished.*"
+        }
+      }
     }
   ]
 }
