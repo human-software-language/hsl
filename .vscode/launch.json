@@ -36,17 +36,18 @@
       "name": "Playground",
       "type": "debugpy",
       "request": "launch",
-      "module": "streamlit",
+      "module": "solara",
       "args": [
         "run",
         "${workspaceFolder}/packages/playground/app.py",
-        "--server.port",
-        "8501",
-        "--server.address",
-        "localhost"
+        "--host",
+        "localhost",
+        "--port",
+        "8501"
       ],
       "console": "integratedTerminal",
-      "justMyCode": true
+      "justMyCode": true,
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "name": "Extension",

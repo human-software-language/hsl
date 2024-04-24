@@ -1,6 +1,0 @@
-[client]
-showSidebarNavigation = false
-
-[server]
-runOnSave = true
-headless = true

@@ -1,0 +1,42 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Universal defaults
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Python files
+[*.py]
+indent_size = 4 # Python conventionally uses four spaces
+
+# Markdown files (allow trailing whitespace for line breaks)
+[*.md]
+trim_trailing_whitespace = false
+
+# Configuration files often have their own specified formats
+[{*.json, *.yml, *.yaml, *.toml}]
+indent_style = space
+indent_size = 2
+
+# HTML, CSS, and JavaScript/TypeScript
+[{*.html, *.css, *.scss, *.js, *.jsx, *.ts, *.tsx}]
+indent_size = 2
+
+# Restrict trailing whitespace and ensure final newlines in shell scripts
+[*.sh]
+indent_size = 2
+
+# ReStructuredText files, used often with Sphinx
+[*.rst]
+indent_size = 3
+
+# Ignore binary files and other non-text formats
+[{*.png, *.jpg, *.jpeg, *.bmp, *.gif, *.ico, *.mov, *.mp4, *.mp3, *.flv, *.exe}]
+charset = none

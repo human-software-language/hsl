@@ -118,9 +118,9 @@ if __name__ == "__main__":
         # "../debugpy/src/debugpy/launcher",
         # "../debugpy/src/debugpy/server",
         # "../packages/playground",
-        "../md/solara-docs",
-        "../packages/playground"
-        "../vscode",
+        "../md/solara-docs/examples",
+        # "../packages/playground",
+        # "../vscode",
         # "../md/streamlit-content/develop",
         # "../packages/dap",
         # "../md/pygls-docs-source",
