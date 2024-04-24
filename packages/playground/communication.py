@@ -1,3 +1,4 @@
+import streamlit as st
 import streamlit.components.v1 as components
 import json
 import uuid
@@ -106,6 +107,7 @@ def send_message(data):
     return response
 
 
+@st.cache_data(hash_funcs={components.html: lambda _: None})
 def register_message_handler(type, handler):
     components.html(
         _js_template
@@ -122,6 +124,7 @@ def register_message_handler(type, handler):
     components.set_state(f"streamlitMessageHandler_{type}", handler)
 
 
+@st.cache_data(hash_funcs={components.html: lambda _: None})
 def unregister_message_handler(type):
     components.html(
         _js_template

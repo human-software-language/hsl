@@ -109,16 +109,18 @@ def build_llm_context(paths):
 if __name__ == "__main__":
     # Specify the list of relative paths
     relative_paths = [
-        "../.streamlit",
-        "../.vscode",
-        "../hsl_exampels",
-        "../utils",
-        "../poetry.toml",
+        # "../.streamlit",
+        # "../.vscode",
+        # "../hsl_exampels",
+        # "../utils",
+        # "../poetry.toml",
         # "../debugpy/src/debugpy/common",
         # "../debugpy/src/debugpy/launcher",
         # "../debugpy/src/debugpy/server",
-        "../packages",
-        # "../vscode",
+        # "../packages/playground",
+        "../md/solara-docs",
+        "../packages/playground"
+        "../vscode",
         # "../md/streamlit-content/develop",
         # "../packages/dap",
         # "../md/pygls-docs-source",
