@@ -36,19 +36,24 @@
       "name": "Playground",
       "type": "debugpy",
       "request": "launch",
-      "module": "solara",
+      "module": "uvicorn",
       "args": [
-        "run",
-        "${workspaceFolder}/packages/playground/app.py",
+        "endpoint:app",
         "--host",
         "localhost",
         "--port",
-        "8501"
+        "8501",
+        "--reload"
       ],
       "console": "integratedTerminal",
       "justMyCode": true,
-      "envFile": "${workspaceFolder}/.env"
+      "env": {
+        "SOLARA_APP": "app"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "cwd": "${workspaceFolder}/packages/playground"
     },
+
     {
       "name": "Extension",
       "type": "extensionHost",

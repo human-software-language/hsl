@@ -14,6 +14,12 @@ import solara
 import solara.lab
 
 
+class VsCodeState(TypedDict):
+    file_path: str
+    cursor_location: tuple  # Assuming cursor location is a tuple of (line, column)
+    line_text: str
+
+
 class MessageDict(TypedDict):
     role: str
     content: str
@@ -25,7 +31,16 @@ else:
     openai = OpenAI()
     openai.api_key = os.getenv("OPENAI_API_KEY")  # type: ignore
 
+
 messages: solara.Reactive[List[MessageDict]] = solara.reactive([])
+
+vscode_state: solara.Reactive[VsCodeState] = solara.reactive(
+    {
+        "file_path": "/path/to/your/file.py",
+        "cursor_location": (10, 5),  # line 10, column 5
+        "line_text": "import os",
+    }
+)
 
 
 def no_api_key_message():
