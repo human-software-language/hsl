@@ -1,8 +1,6 @@
-I want to build first version of the system. The idea to use lsp backend(pylsp),https://github.com/shd101wyy/crossnote and https://github.com/shd101wyy/vscode-markdown-preview-enhanced. I want to dramatically increase developing productivity. At first step i want to build and execute source source code parts in markdown, for that i should create HLS program structure and files that i can see inside IDE at left side. Brainstorm awesome workflow for me using that instruments
-
 # Human Software Language (HSL)
 
-HSL introduces a new level of abstraction in programming, seamlessly merging human language with code via advanced Language Models (LLMs) and intuitive markdown syntax. This approach effortlessly transforms ideas into powerful software, eliminating complex syntax and steep learning curves. HSL streamlines development across various platforms, making it fast, accessible, and scalable. It's a redefined programming paradigm shift that fosters innovation through collaboration, pushing the boundaries of what's possible. With HSL, your imagination sets the pace.
+HSL introduces a new level of abstraction in programming, seamlessly merging human language with code via advanced Language Models (LLMs) and intuitive markdown syntax. This  approach effortlessly transforms ideas into powerful software, eliminating complex syntax and steep learning curves. HSL streamlines development across various platforms, making it fast, accessible, and scalable. It's a redefined programming paradigm shift that fosters innovation through collaboration, pushing the boundaries of what's possible. With HSL, your imagination sets the pace.
 
 ## Vision
 
@@ -196,7 +194,7 @@ By leveraging platform-specific components, HSL programs can seamlessly integrat
 
 ## Software Components
 
-### HSL Compiler
+### HSL Transpiler
 
 The HSL Compiler is the core component responsible for transpiling HSL code into executable code in various target languages and frameworks. It consists of the following sub-components:
 
@@ -532,3 +530,112 @@ Activated when a user needs to send an email via Gmail, whether for personal or 
 7. Once all information is entered, click the `[send button]` to send the email.
 8. Confirm that the email has been sent by checking for a "Message sent" notification `[message sent notification]` and log the confirmation and time of sending as `emailSentConfirmation`.
 ```
+
+
+## Notes from talks
+
+```
+- How will the paradigm of clicking a button in a web browser be implemented? Vision interface?
+- I would narrow it down, lay the foundation for modularity, but start with a small, single direction, a simple concept (make an automaton around the browser, browsers are now custom on all platforms, it seems) and expand it. But I would present it through a general model, like we will expand in general, like you have.
+```
+
+Vision models are slower and more expensive and will always be that way, and there is enough semantic data in the DOM tree. I started working on this with the idea that software doesn't have to operate with hardware through the same interfaces as humans to achieve the same goals more simply/efficiently. The advantage of operating the browser through code is speed and cost-effectiveness. That is, in this case, we take up the time of generation/validation/regeneration, but after that, the code is executed without referring to the LLM, which can nevertheless be done for content analysis and decision making.
+
+In general, the idea of DSL came when it was possible to confirm the hypothesis with the help of R&D that current LLMs have the cognitive ability to write and adapt code to achieve the expected result in a dynamic external environment.
+
+Experiment(without man in the middle):
+
+1. There is a YML config generated with the help of GPT-4 and a template from the prompt - "Parse 30 kitesurfing spots in Fortaleza, Brazil" which describes how to operate the browser. As a result, it describes the logic of parsing results and page-by-page navigation with clicks that do not imply lazy loading (LLM was mistaken) (50 lines).
+
+2. There is a js algorithm that builds a simplified DOM tree for LLM with deterministic IDs on all important elements that do not change when translating content, new neighbors of the element, and changes to elements at other levels of the DOM tree (popups do not affect). It works with complex DOM cases like Facebook and Gmail (context length allows). Example for Google's main page:
+
+```
+- html[did="4q3f"] data-lt-installed: true
+  - body[did="1c6f"] data-dt: 1
+    - div[did="3p30"] data-hveid: 1
+      - div[did="734h"] role: navigation
+        - div[did="216g"] id: gb
+          - div[did="3c0m"] data-ogsr-up: 
+            - div[did="164m"] data-ogbl: 
+              - a[did="5o42"] aria-label: Mail (opens in a new tab), data-pid: 23text: "Mail" 
+              - a[did="2z37"] aria-label: Image search (opens in a new tab), data-pid: 2text: "Images"
+            - div[did="3426"] data-ogsr-fb: true, data-ogsr-alt: , id: gbwa
+              - a[did="5143"] aria-label: Google Apps, aria-expanded: false, role: button
+            - a[did="4l4q"] aria-label: Google Account: MindsightsAI
+(m@hslang.ai), role: button
+              - img[did="1l4l"] alt: , aria-hidden: true, data-noaft: , data-atf: 1, data-frt: 0
+      - img[did="2027"] alt: Google, data-atf: 1, data-frt: 0        
+      - form[did="0n4z"] role: search
+        - div[did="5p6y"] data-alt: false, data-biboe: false, data-efaql: false, data-hp: true
+          - div[did="0d0l"] data-hpmde: false, data-mnr: 10  
+            - textarea[did="531l"] aria-controls: Alh6id, aria-owns: Alh6id, title: Search, value: , aria-label: Find, aria-autocomplete: both, aria-expanded: false, aria-haspopup: false, id: APjFqb, role: combobox, data-ved: 0ahUKEwi2hqHchseFAxWnpZUCHRCKDbEQ39UDCAw
+          - div[did="2z57"] aria-label: Onscreen keyboard, role: button   
+          - div[did="1y47"] aria-label: Voice search, role: button, data-ved: 0ahUKEwi2hqHchseFAxWnpZUCHRCKDbEQvs8DCA4
+          - div[did="340x"] data-base-lens-url: https://lens.google.com, data-image-processor-enabled: true, data-is-images-mode: false, data-preferred-mime-type: image/jpeg, data-propagated-experiment-ids: , aria-label: Search by image, role: button, data-ved: 0ahUKEwi2hqHchseFAxWnpZUCHRCKDbEQhqEICA8     
+          - div[did="1l3o"] data-ved: 0ahUKEwi2hqHchseFAxWnpZUCHRCKDbEQ4d8ICBs
+          - input[did="6l32"] value: Google Search, aria-label: Google Search, role: button, type: submit, data-ved: 0ahUKEwi2hqHchseFAxWnpZUCHRCKDbEQ4dUDCBw  
+          - input[did="2w4g"] value: I'm Feeling Lucky, aria-label: I'm Feeling Lucky, type: submit, data-ved: 0ahUKEwi2hqHchseFAxWnpZUCHRCKDbEQ19QECB0
+      - div[did="3o5k"] id: gws-output-pages-elements-homepage_additional_languages__als  
+        - div[did="583z"] id: SIvCobtext: "Google services are available in these languages:"
+          - a[did="2f6g"] text: "Português (Brasil)"
+      - div[did="3j4k"] role: contentinfo
+        - div[did="585f"] text: "Brazil"
+        - div[did="3d2z"] data-sfe: false, data-sfsw: 1380
+          - a[did="2v67"] text: "About Google" 
+          - a[did="5j19"] text: "Advertising"
+          - a[did="0w25"] text: "Business"  
+          - a[did="4h6b"] text: "How Google Search works"
+          - a[did="2s54"] text: "Privacy" 
+          - a[did="4d36"] text: "Terms"  
+          - span[did="4d4k"] data-ffp: false
+            - g-popup[did="3e5c"]
+              - div[did="1b6b"] aria-expanded: false, aria-haspopup: true, role: button  
+                - div[did="1a5h"] aria-controls: _npkeZra_FKfL1sQPkJS2iAs_6, aria-haspopup: truetext: "Settings"
+```
+
+3. Using GPT-4 with [DSPY](https://github.com/stanfordnlp/dspy), the LLM program further writes the browser control function code based on the YAML config (python + playwright).
+4. We get code with errors from the compiler (python).  
+5. GPT-4 from the summer of 2024 fixes the errors on the first try.
+6. We run it again, part of the code is executed, we see the SERP results, but click errors occur to go to the next page (as described in yaml).
+7. We feed the yaml file, the current simplified DOM diff(item 2) and the run errors into the LLM program.
+8. We get a changed YAML config with lazy load logic that looks valid.  
+9. We send the new config and the LLM program generates and then the executor executes the code with the expected result on the first try.
+10. We get the output with SERP in the format described in the YAML config, as a TXT file as described in the config.
+
+That is, the plan and path is the same as you described, to start with the browser (or rather now a level lower with python, which can generate OS-specific python code), to work out and think through the dev flow in DSL: Semantic, Runtime, AST Tree, [Language Server Protocol](https://microsoft.github.io/language-server-protocol/), [Debug Adapter Protocol](https://microsoft.github.io/debug-adapter-protocol/), Playground inside IDE (streamlit app). The playground content allows you to control transpiling and code execution with buttons depending on the cursor position in the MD file mixed with a chatgpt-like experience for generating/modifying HSL programs. The next big step is to transfer the experience from the browser experiment into the language.
+
+```
+- How to integrate certain programs into the OS, their launch API for start, stop, switching between windows, and so on. Need tighter OS integration, which can be time-consuming. Write a lot of serialization/deserialization.  
+```
+
+There are different options here, but the fact is that a huge number of people are working on solving this problem, mostly using vision models, for example [Open Interpreter](https://github.com/OpenInterpreter/open-interpreter) or [OSWorld](https://github.com/xlang-ai/OSWorld)
+
+The easiest way is to use "Custom components can be created by writing custom interpreters, validators, and executors that adhere to the HSL component specification." At the same time, the transpiler must take into account the current OS (different OS - different platforms into which HSL can be transpiled).
+
+That is, it seems that HSL should easily adapt and strengthen over time not only from the improvement of models, but also with the release of new agents/platforms that can themselves be new levels of abstraction over current technologies.  
+
+```
+- Querying the DB - also needed in metrics. How to get into the code level if the DB code (query) is incorrect? This is the paradigm that we write code in a simple language (natural), it is based on statistical models. And there will be errors and we need an interface and a set of rules and approaches for debugging and interacting with how the interpreter (LLM) behaved. It would be cool to loop this so that people fix the interpreter's behavior, and you retrain the LLM, resulting in a collective model.
+```
+
+For Supabase, metrics are stored in Prometheus. It works [like this](https://supabase.com/blog/supabase-reports-and-metrics) [github](https://github.com/supabase/supabase-grafana)  
+
+But if at the level of the development process - then in the playground the user controls the process of transpilation, testing and launching, this also includes displaying the DAG, in general the topic of graphs is hot and applicable in many places, there is a lot of research, but personally I do not yet understand how to solve the problem of updating large graphs for reasonable resources (need help).
+
+Here comes the first stage where collaboration can be set up to gather shared knowledge. In addition, the transpilation process is validated by a person, which are ready-made examples for the dataset in [dspy](https://github.com/stanfordnlp/dspy) and a way to obtain [metrics](https://github.com/stanfordnlp/dspy/blob/main/examples/tweets/tweet_metric.py) from the text in order to optimize prompts or fine-tune models with approximately the same codebase.
+
+```
+- Metrics of various plugins are needed, what will be the usability of the whole concept if the plugins do not work (click on a button in the browser)  
+```
+
+After transpiling the code, the HSL should describe the deployment process, and the playground (in the IDE or web) should also allow controlling production and be a Human in the Loop interface in the same paradigm as for the dev flow. Infrastructure, like processing, can be the main sources of cash flow here.
+
+```
+- I saw that you wrote about improving models through interaction with user feedback in the refinement.
+```
+
+It follows from all this that collaboration and the transfer of value between users and into the model as a result of DSL transpilation can be the main intellectual property in the paradigm of an open source project. We need to think about how this process can work many more times to be legally and technically protected while getting the maximum value and bringing the maximum benefit to users.
+
+## Contact
+
+For any questions or discussions please contact using [Twitter](https://twitter.com/minsightsai) or m@hslang.ai
