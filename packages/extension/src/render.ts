@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { getNonce } from './utils/getNonce';
 import { getUri } from './utils/getUri';
 import { outputChannel } from './output';
+import axios from 'axios';
 
 import {
   LanguageClient,
@@ -36,13 +37,13 @@ export async function renderHSLCommand(
       const nonce = getNonce();
 
       // Convert the localhost URL to a webview URI
-      const streamlitAppUri = webviewPanel.webview.asWebviewUri(
+      const solaraAppUri = webviewPanel.webview.asWebviewUri(
         vscode.Uri.parse('http://localhost:8501'),
       );
 
       const csp = [
         `default-src 'none';`,
-        `frame-src ${streamlitAppUri.toString()};`,
+        `frame-src ${solaraAppUri.toString()};`,
         `script-src 'nonce-${nonce}';`,
         `style-src ${webviewPanel.webview.cspSource};`,
         `font-src ${webviewPanel.webview.cspSource};`,
@@ -70,7 +71,7 @@ export async function renderHSLCommand(
           </style>
         </head>
         <body>
-          <iframe id="hslPreviewIframe" src="${streamlitAppUri}" allowfullscreen></iframe>
+          <iframe id="hslPreviewIframe" src="${solaraAppUri}" allowfullscreen></iframe>
           <script nonce="${nonce}">
             const vscode = acquireVsCodeApi();
 
@@ -92,13 +93,12 @@ export async function renderHSLCommand(
               window.addEventListener('message', event => {
                 console.log(event);
                 // Check if the message came from the iframe
-                if (event.origin === "${streamlitAppUri}") {
+                if (event.origin === "${solaraAppUri}") {
                   // Message is from iframe, forward it to VSCode
                   vscode.postMessage(event.data);
                 } else {
-                  // Assuming any other message is from VSCode
                   // Forward it to the iframe
-                  iframeElement.contentWindow.postMessage(event.data, "${streamlitAppUri}");
+                  iframeElement.contentWindow.postMessage(event.data, "${solaraAppUri}");
                 }
               }, false);
             });
@@ -107,10 +107,38 @@ export async function renderHSLCommand(
         </html>      
       `;
 
-      // Listen for selection changes in the active text editor and send to streamlit
-      vscode.window.onDidChangeTextEditorSelection(
-        (event) => {
-          webviewPanel.webview.postMessage(event);
+      const endpointUrl = 'http://localhost:8501/update_state';
+
+      vscode.workspace.onDidChangeTextDocument(
+        async (event) => {
+          if (event.document === activeEditor.document) {
+            const cursorPosition = activeEditor.selection.start;
+            const lineText = event.document.lineAt(cursorPosition.line).text;
+            const vscodeState = {
+              file_path: event.document.uri.path,
+              cursor_location: {
+                line: cursorPosition.line,
+                column: cursorPosition.character,
+              },
+              line_text: lineText,
+            };
+
+            try {
+              // Send the POST request using axios
+              const response = await axios.post(endpointUrl, vscodeState, {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+              console.log('Response from the server:', response.data);
+            } catch (error: unknown) {
+              // Assume error is of type any to access common properties like message
+              const message =
+                (error as any).message || 'An unknown error occurred';
+              console.error('Error making the request:', error);
+              vscode.window.showErrorMessage(`Error sending data: ${message}`);
+            }
+          }
         },
         null,
         context.subscriptions,

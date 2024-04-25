@@ -21,3 +21,4 @@ debugpy
 *.log
 md/
 poetry.lock
+*/HybridAGI/*

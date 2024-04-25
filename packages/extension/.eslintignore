@@ -9,6 +9,3 @@
 *.vsix
 node_modules
 out
-
-## special cases
-crossnote

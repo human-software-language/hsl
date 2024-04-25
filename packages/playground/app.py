@@ -16,7 +16,7 @@ import solara.lab
 
 class VsCodeState(TypedDict):
     file_path: str
-    cursor_location: tuple  # Assuming cursor location is a tuple of (line, column)
+    cursor_location: tuple
     line_text: str
 
 
@@ -33,8 +33,9 @@ else:
 
 
 messages: solara.Reactive[List[MessageDict]] = solara.reactive([])
+a = solara.reactive("test")
 
-vscode_state: solara.Reactive[VsCodeState] = solara.reactive(
+vscode_state = solara.reactive(
     {
         "file_path": "/path/to/your/file.py",
         "cursor_location": (10, 5),  # line 10, column 5
@@ -83,6 +84,7 @@ def Page():
             messages=messages.value,  # type: ignore
             stream=True,
         )
+        a.value = "1231231231"
         messages.value = [*messages.value, {"role": "assistant", "content": ""}]
         for chunk in response:
             if chunk.choices[0].finish_reason == "stop":  # type: ignore
@@ -94,6 +96,12 @@ def Page():
     with solara.Column(
         style={"width": "700px", "height": "50vh"},
     ):
+        solara.Markdown(f"### a\n- a: {a.value}\n")
+        print(a.value)
+        solara.Markdown(
+            f"### VS Code State\n- File Path: {vscode_state.value['file_path']}\n- Cursor Location: {str(vscode_state.value['cursor_location'])}\n- Line Text: {vscode_state.value['line_text']}"
+        )
+
         with solara.lab.ChatBox():
             for item in messages.value:
                 with solara.lab.ChatMessage(

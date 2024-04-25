@@ -103,7 +103,7 @@
     ]
   },
   "dependencies": {
-    "crossnote": "^0.9.9",
+    "axios": "^1.6.8",
     "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {

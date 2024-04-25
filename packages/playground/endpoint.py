@@ -10,7 +10,7 @@ from app import VsCodeState
 
 async def update_state(request: Request):
     # we import this late, otherwise we get circular imports
-    import packages.playground.app as app
+    import app
 
     state_data = await request.json()  # Parse JSON payload from the request
     vscode_state = VsCodeState(
@@ -18,12 +18,13 @@ async def update_state(request: Request):
     )  # Validate and create a VsCodeState instance
 
     # undocumented, *might* break in the future, but we do our best to keep it working
-    # Reset the clicks for all kernels
+    # Set state for all kernels
     for kernel_id, context in solara.server.kernel_context.contexts.items():
         with context:
-            app.vscode_state = vscode_state
+            app.vscode_state.value = vscode_state
+            app.a.value = "qqqq"
             print(
-                f"Updated VSCode state with file path: {vscode_state.file_path}, cursor location: {vscode_state.cursor_location}"
+                f"Updated VSCode state with file path: {vscode_state['file_path']}, cursor location: {vscode_state['cursor_location']}"
             )
     return JSONResponse({"status": "State updated"})
 
